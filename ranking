@@ -1,0 +1,24 @@
+// --- My Personal Game Achievement Data ---
+// Structure: { rank: Number, title: String }
+
+const achievements = [
+    {
+        rank: 1, 
+        title: "Cyber Circles 3 Runs", 
+    },
+    {
+        rank: 2, 
+        title: "ChaoStep 9 Runs, 
+    },
+    {
+        rank: 3, 
+        title: "Tidal Circles 100%", 
+    },
+    { 
+        rank: 4, 
+        title: "16 demons",
+    },
+    { 
+        rank: 5, 
+        title: "Congregation New 100%",
+];
