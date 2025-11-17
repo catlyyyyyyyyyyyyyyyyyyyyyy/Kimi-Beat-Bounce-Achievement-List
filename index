@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Achievement Ranking</title>
+    <style>
+        /* --- GLOBAL STYLES --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 30px 10px;
+            /* Deep Space Black background with subtle grid texture */
+            background-color: #0c0c16; 
+            background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+        h1 {
+            color: #9333ea; /* Deep Purple Accent */
+            text-align: center;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+            font-size: 3rem;
+            font-weight: 800;
+            text-shadow: 0 0 15px rgba(147, 51, 234, 0.6); 
+        }
+        
+        /* --- SORT BUTTONS --- */
+        #sort-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 35px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .sort-button {
+            padding: 12px 28px;
+            background-color: #4f46e5; /* Indigo */
+            color: white;
+            border: none;
+            border-radius: 9999px; /* Fully rounded pills */
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+        .sort-button:hover {
+            background-color: #4338ca;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        /* --- ACHIEVEMENT LIST CONTAINER --- */
+        #achievement-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* --- INDIVIDUAL ACHIEVEMENT CARD --- */
+        .achievement-card {
+            display: flex;
+            background-color: #171725; /* Darker blue/grey background */
+            border: 2px solid #3f3f46;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .achievement-card:hover {
+            transform: scale(1.01);
+            border-color: #8b5cf6; /* Hover glow border */
+        }
+
+        /* Rank Column (The Trophy Visuals) */
+        .rank-column {
+            width: 15%;
+            min-width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.2rem;
+            font-weight: 900;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Trophy Colors (Highly Decorated) */
+        .rank-1 { 
+            background: linear-gradient(145deg, #FFD700, #C0A800); /* Gold */
+            color: #333;
+            border-right: 3px solid #ffbf00;
+        } 
+        .rank-2 { 
+            background: linear-gradient(145deg, #C0C0C0, #8A8A8A); /* Silver */
+            color: #333;
+            border-right: 3px solid #b3b3b3;
+        } 
+        .rank-3 { 
+            background: linear-gradient(145deg, #CD7F32, #965a19); /* Bronze */
+            color: #333;
+            border-right: 3px solid #b36e2f;
+        } 
+        .rank-column:not(.rank-1):not(.rank-2):not(.rank-3) {
+            background-color: #3f3f46; /* Default Dark Rank */
+            color: #94a3b8;
+        }
+
+        /* Content Column */
+        .content-column {
+            flex-grow: 1;
+            padding: 30px;
+        }
+        .title-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            border-bottom: 1px dashed #475569;
+            padding-bottom: 10px;
+        }
+        .achievement-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #a78bfa; /* Light Purple for Titles */
+        }
+        .achievement-game {
+            font-style: italic;
+            color: #94a3b8;
+            font-size: 1rem;
+            padding-top: 8px;
+            font-weight: 500;
+        }
+        .achievement-description {
+            margin-bottom: 20px;
+            color: #cbd5e1;
+            line-height: 1.5;
+            font-size: 1.05rem;
+        }
+        .details-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+            color: #64748b;
+            border-top: 1px dashed #475569;
+            padding-top: 15px;
+        }
+        .proof-link {
+            color: #34d399; /* Mint Green for Links */
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .proof-link:hover {
+            color: #10b981;
+            text-decoration: underline;
+        }
+
+        /* --- MOBILE ADJUSTMENTS (RESPONSIVENESS) --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .achievement-card {
+                flex-direction: column;
+            }
+            .rank-column {
+                width: 100%;
+                height: 80px;
+                font-size: 2.8rem;
+                border-right: none;
+                border-bottom: 3px solid rgba(0, 0, 0, 0.3);
+            }
+            .content-column {
+                padding: 20px;
+            }
+            .title-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .achievement-title {
+                font-size: 1.5rem;
+            }
+            .details-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🏆 My Personal Achievement Hall of Fame ✨</h1>
+
+    <div id="sort-container">
+        <button class="sort-button" onclick="sortTable('rank')">Rank</button>
+        <button class="sort-button" onclick="sortTable('title')">Achievement Title</button>
+        <button class="sort-button" onclick="sortTable('dateEarned')">Date Earned</button>
+    </div>
+
+    <div id="achievement-list">
+        <!-- Cards will be inserted by JavaScript -->
+    </div>
+
+    <script>
+        // --- IMPORTANT: This script loads the data from achievementData.js ---
+        // Since we cannot directly import in this HTML context, we assume 'achievements' 
+        // is defined in the separate file and is globally available.
+
+        // Fallback for demonstration if achievementData.js isn't linked correctly
+        const achievements = (typeof achievements === 'undefined') ? [
+            { rank: 1, title: "Cyber Circles 3 Runs", game: "Geometry Dash", description: "The peak of my skill: achieved three perfect, consecutive runs of this high-tier Extreme Demon level. The run took over 10,000 attempts to complete.", dateEarned: "2025-11-15", proofLink: "https://youtube.com/my-cyber-circles-proof" },
+            { rank: 2, title: "Legendary Forger", game: "Fantasy MMO", description: "Maxed out all seven crafting professions, requiring hundreds of hours of grinding.", dateEarned: "2024-08-20", proofLink: "#" },
+            { rank: 3, title: "Perfectionist Pilot", game: "Flight Simulator", description: "Successfully landed a Boeing 747 in a category 3 storm at night with zero-visibility.", dateEarned: "2023-05-10", proofLink: "https://twitch.tv/my-pilot-clip" },
+            { rank: 4, title: "Eternal Champion (No Deaths)", game: "Roguelike RPG", description: "Beat the final boss of the hardest difficulty mode without taking a single death.", dateEarned: "2024-01-01", proofLink: "#" }
+        ] : achievements;
+        
+        // --- JAVASCRIPT LOGIC (GENERATES THE CARDS AND HANDLES SORTING) ---
+
+        const achievementListContainer = document.getElementById('achievement-list');
+        let sortKey = 'rank'; // Default sort key
+        let sortDirection = 1; // 1 for ascending, -1 for descending
+
+        function getRankClass(rank) {
+            if (rank === 1) return 'rank-1';
+            if (rank === 2) return 'rank-2';
+            if (rank === 3) return 'rank-3';
+            return ''; 
+        }
+
+        function renderAchievements(list) {
+            achievementListContainer.innerHTML = ''; 
+            list.forEach(item => {
+                const proofText = item.proofLink && item.proofLink !== '#' 
+                    ? `<a href="${item.proofLink}" target="_blank" class="proof-link">View Proof &rarr;</a>` 
+                    : `<span style="color: #64748b;">Proof not available</span>`;
+
+                const cardHTML = `
+                    <div class="achievement-card">
+                        <div class="rank-column ${getRankClass(item.rank)}">
+                            ${item.rank}
+                        </div>
+                        <div class="content-column">
+                            <div class="title-bar">
+                                <span class="achievement-title">${item.title}</span>
+                                <span class="achievement-game">${item.game}</span>
+                            </div>
+                            <p class="achievement-description">${item.description}</p>
+                            <div class="details-bar">
+                                <span>Earned: ${item.dateEarned}</span>
+                                ${proofText}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                achievementListContainer.innerHTML += cardHTML;
+            });
+        }
+
+        function sortTable(key) {
+            sortDirection = (sortKey === key) ? sortDirection * -1 : 1;
+            sortKey = key;
+
+            const sortedList = achievements.sort((a, b) => {
+                let comparison = 0;
+                
+                if (typeof a[key] === 'number') {
+                    comparison = a[key] - b[key];
+                } 
+                else if (key === 'dateEarned') {
+                    // Sorting by date (newest/oldest)
+                    comparison = new Date(a[key]) - new Date(b[key]);
+                }
+                else {
+                    const nameA = a[key].toUpperCase(); 
+                    const nameB = b[key].toUpperCase();
+                    if (nameA > nameB) comparison = 1;
+                    else if (nameA < nameB) comparison = -1;
+                }
+                
+                return comparison * sortDirection;
+            });
+
+            renderAchievements(sortedList);
+        }
+
+        // Initial render (sort by rank first)
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAchievements(achievements.sort((a, b) => a.rank - b.rank));
+        });
+
+    </script>
+
+</body>
+</html>
